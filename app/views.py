@@ -1,28 +1,23 @@
-from flask import render_template
 from app import app
 
-@app.route("/")  
-@app.route("/<name>")  
-def greeting(name = "World"):
+from flask import render_template
+
+@app.route("/")
+def index():
     return render_template("index.html")
 
-@app.route("/extract")  
-def extract(name = "World"):
+@app.route("/extract")
+def extract():
     return render_template("extract.html")
 
-@app.route("/extract")  
-def products(name = "World"):
+@app.route("/products")
+def products():
     return render_template("products.html")
 
-@app.route("/product/<product_id>")  
-def product(name = "World"):
-    return render_template("product.html")
+@app.route("/product/<product_id>")
+def product(product_id):
+    return render_template("product.html", product_id=product_id)
 
-@app.route("/about")  
-def about(name = "World"):
+@app.route("/about")
+def about():
     return render_template("about.html")
-
-
-
-    
-#flask run --debug   - reload of the page
