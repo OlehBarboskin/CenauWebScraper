@@ -2,8 +2,10 @@ import os
 import json
 import pandas as pd
 import numpy as np
-
+import requests
+from config import headers
 class Product:
+    
     def __init__(self, product_id, product_name, opinions, stats):
         self.product_id = product_id
         self.product_name = product_name
@@ -93,13 +95,36 @@ class Opinion:
         self.vote_no = vote_no
         self.publish_date = publish_date
         self.purchase_date = purchase_date
-    
+   
     def __str__(self):
         return "\n".join([f"{key}: {getattr(self, key)}" for key in self.selectors.keys()])
     
     def __repr__(self):
         return "Opinion("+", ".join([f"{key}={str(getattr(self, key))}" for key in self.selectors.keys()])+")"
     
+    def extract_name(self):
+        next_page = f"https://www.ceneo.pl/{self.product_id}#tab-reviews"
+        response = requests.get(next_page, heades = headers )
+        if response.status_code == 200:
+            page_dom = BeautifulSoup(response.text, 'html.parses')
+            self.product_name = extract_data(page_dom, "h1")
+            opinions_count = extract_data()
+
+
+        else:
+            return
     def transform_to_dict(self):
         return {key: getattr(self, key) for key in self.selectors.keys()}
     
+    single_opinion['content_en'] = translate(single_opinion['content_pl'])
+        single_opinion['pros_en'] = [translate(pros) for pros in single_opinion['pros_pl']]
+        single_opinion['cons_en'] = [translate(cons) for cons in single_opinion['cons_pl']]
+        single_opinion['recommendation'] = True if single_opinion['recommendation']=='Polecam' else False if  single_opinion['recommendation']=="Nie polecam" else None
+        single_opinion['stars'] = float(single_opinion['stars'].split("/")[0].replace(",", "."))
+        single_opinion['vote_yes'] = int(single_opinion['vote_yes'])
+        single_opinion['vote_no'] = int(single_opinion['vote_no'])
+        all_opinions.append(single_opinion)
+    
+    
+    def transform(self):
+
