@@ -16,6 +16,7 @@ def extract():
     form = ExtractForm(request.form)
     if form.validate():
         product_id = form.product_id.data
+        product = 
         return redirect(url_for('product', product_id=product_id))
     return render_template('extract.html', form=form)
 
