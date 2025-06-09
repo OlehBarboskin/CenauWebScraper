@@ -1,5 +1,49 @@
 {% extends 'base.html' %}
-{% block title %}List of products{% endblock %}
+{% block title %}List of Products{% endblock %}
 {% block content %}
+<h1 class="mb-4 text-2xl font-bold">Extracted Products</h1>
+
+{% if products %}
+<table class="table-auto w-full border-collapse border border-gray-300">
+    <thead>
+        <tr class="bg-gray-100">
+            <th class="border px-4 py-2">Product Name</th>
+            <th class="border px-4 py-2">Opinions</th>
+            <th class="border px-4 py-2">With Pros</th>
+            <th class="border px-4 py-2">With Cons</th>
+            <th class="border px-4 py-2">Average Score</th>
+            <th class="border px-4 py-2">Download</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in products %}
+        <tr class="text-center hover:bg-gray-50">
+            <td class="border px-4 py-2">{{ product.product_name }}</td>
+            <td class="border px-4 py-2">{{ product.stats.opinions_count }}</td>
+            <td class="border px-4 py-2">{{ product.stats.pros_count }}</td>
+            <td class="border px-4 py-2">{{ product.stats.cons_count }}</td>
+            <td class="border px-4 py-2">{{ product.stats.average_rate }}</td>
+            <td class="border px-4 py-2 space-x-2">
+                <a href="{{ url_for('index', product_id=product.product_id, format='csv') }}" class="text-blue-600 hover:underline">CSV</a>
+                <a href="{{ url_for('index', product_id=product.product_id, format='xlsx') }}" class="text-green-600 hover:underline">XLSX</a>
+                <a href="{{ url_for('index', product_id=product.product_id, format='json') }}" class="text-red-600 hover:underline">JSON</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="text-gray-600">No products have been extracted yet.</p>
+{% endif %}
 
 {% endblock %}
+
+
+<!-- As a user, I visit the Product List page
+➢ I see the list of products for which reviews have been extracted
+➢ For each product, I see:
+▪ Number of opinions
+▪ Number of opinions in which disadvantages have been listed
+▪ Number of opinions in which advantages have been listed
+▪ Average score
+▪ Button to download a .csv, .xlsx or .json file with opinions about product -->
